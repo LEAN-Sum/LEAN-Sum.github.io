@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        除了帅气，我还有啥！｜LeeSum&#39;s blog
+        today｜LeeSum&#39;s blog
         
     </title>
 
-    <link rel="canonical" href="http://LEAN-Sum.github.io/2020/05/20/除了帅气，我还有啥！/">
+    <link rel="canonical" href="http://LEAN-Sum.github.io/2020/05/20/today/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -151,7 +151,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>除了帅气，我还有啥！</h1>
+                    <h1>today</h1>
                     
                     <span class="meta">
                          作者 LeeSum
@@ -161,6 +161,9 @@
                     </span>
                     <div class="tags text-center">
                         
+                        <a class="tag" href="/tags/#python"
+                           title="python">python</a>
+                        
                     </div>
                 </div>
             </div>
@@ -168,7 +171,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            除了帅气，我还有啥！
+            today
         </span>
     </div>
 </header>
@@ -179,21 +182,76 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                
+                <p>日程、统计、我的 </p>
+<p>具体的xml文件 3-4个Fragment 2个Adapter 1个DialogFragment 1个Activity</p>
+<p>涉及的控件：TextView Toolbar RecycleView FloatingActionButton (ViewPager/Framelayout) button imageView progressBar</p>
+<p>1、底部导航</p>
+<p>​    实现方法一：</p>
+<p>​            ViewPager + RadioGroup/普通button + Fragment</p>
+<p>​            或者直接 button+Framelayout+Fragment(<u>已实现</u>) 利用 add hide show 方法</p>
+<p>​    实现方法二：</p>
+<p>​            BottomNavigationView AS提供的</p>
+<p>​    底部导航三个图标+选中态的三个图标（png形式 相同大小如48px）</p>
+<p>​    ques: Fragment里如何响应点击事件/如何像使用activity一样使用fragment</p>
+<p>2、顶部菜单</p>
+<p>​    Toolbar替换原有的Actionbar </p>
+<p>​    即每个Activity顶部都需要放一个Toolbar 且在AndroidManifest将theme改为NoActionBar</p>
+<p>​    <del>ques：具体的返回、更多按钮的设置 需要自定义图标 暂时不使用</del></p>
+<p>3、日程页 （<u>基本实现，数据存储未解决</u>）</p>
+<p>​    FloatingActionButton 使用可拖拽浮动按钮响应添加事件</p>
+<p>​    添加事件</p>
+<p>​        方法1：DialogFragment 利用弹出框实现添加事件 此处需要设计一个Fragment即弹出框的样式</p>
+<p>​        方法2：新的页面/Fragment，利用intent传值实现数据传参</p>
+<p>​    RecycleView 用来展示以及定义的日程 ——需配套使用Adapter设计每个元素，Adapter为RecycleView中每个元素的样式</p>
+<p>4、统计页</p>
+<p>​    tab切换当天/最近七天    RecycleView + Adapter数据展示——设计Adapter (<u>已实现</u>)</p>
+<p>​    ProgressBar+Chart 可视化数据 （进度条展示使用手机时间占比、Chart展示使用时间变动、Chart库目前使用MPAndroidChart）</p>
+<p>​    如果要点击某个应用展示具体应用七天使用情况变化 则还需要一个页面（未迁移，具体图标库待定）</p>
+<p>5、我的页（待定）</p>
+<p>​    普通 Linear 布局</p>
+<p>6、具体功能实现</p>
+<p>​    a、用定时器实现每十分钟/五分钟，检测特定应用当日使用情况 - ybq</p>
+<p>​    b、应用使用情况是否需要存储到数据库？</p>
+<p>​    c、本地存储 - zq</p>
+<p>​        (1) 用户的自定义日程存储到本地（应用包名/应用名+最长使用时间+备注信息+今日使用时间default=0）</p>
+<p>​        (2) 已安装应用（这个每次都查可能较费时间，体验不太好）</p>
+<p>​    d、统计页展示每日/七天应用使用情况，参考手机自带情景智能 √</p>
+<p>​            具体统计使用UsageStats</p>
+<p>​            未对系统应用进行排除处理</p>
+<p>​    e、弹窗提醒，使用Notification，具体提醒方式 - ybq</p>
+<p>​            if 定时器查询时应用使用时间&gt;最长使用时间 and 定时器查询时应用使用时间！=今日使用时间:</p>
+<p>​                    今日使用时间 = 定时器查询时应用使用时间</p>
+<p>​                    notification</p>
+<p>​            # 使用Notification需要一个独立的id用来响应之后的弹窗点击事件等 </p>
+<p>​    <del>f、利用包名获取应用名和应用图标 easy</del></p>
+<p>​    g、对于日程安排的完成情况进行统计和展示</p>
+<p>7、开发时的一些tips</p>
+<ul>
+<li>横向布局n个子元素等宽 令weight=1</li>
+<li>在绑定控件时，注意引用的是哪个类里的控件</li>
+<li>注意生命周期，在正确的生命周期内编写函数，尤其是Fragment</li>
+<li>规范id命名</li>
+<li>Adapter定义时一定要使用List作为输入</li>
+<li>因为时区问题，需要将UsageStats取得的时间-8h</li>
+<li>对使用过但删除的应用做异常处理❌</li>
+</ul>
+<p>8、questions</p>
+<ul>
+<li><input disabled="" type="checkbox"> 由于Fragment Home 中的数据curtime一直在变动 如何让保持数据的时效性？即何时刷新adapter的数据</li>
+<li><input disabled="" type="checkbox"> Fragment Home页中的数据 是否对已超时的数据进行分类？</li>
+<li><input disabled="" type="checkbox"> 下滑刷新事件</li>
+<li><input disabled="" type="checkbox"> 对各种数据的类型以及函数进行规范化和文档说明以便于后续开发</li>
+</ul>
+
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2020/05/20/today/" data-toggle="tooltip" data-placement="top"
-                           title="today">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2020/05/20/hello-world/" data-toggle="tooltip" data-placement="top"
-                           title="Hello World">Next Post &rarr;</a>
+                        <a href="/2020/05/20/除了帅气，我还有啥！/" data-toggle="tooltip" data-placement="top"
+                           title="除了帅气，我还有啥！">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -233,6 +291,9 @@
                         <a href="/tags/">FEATURED TAGS</a>
                     </h5>
                     <div class="tags">
+                        
+                        <a class="tag" href="/tags/#python"
+                           title="python">python</a>
                         
                     </div>
                 </section>
