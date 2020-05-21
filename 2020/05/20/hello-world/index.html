@@ -192,6 +192,14 @@
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<h3 id="The-Question-of-Hexo"><a href="#The-Question-of-Hexo" class="headerlink" title="The Question of Hexo"></a>The Question of Hexo</h3><h4 id="404"><a href="#404" class="headerlink" title="404"></a>404</h4><p>发现博客中，本地server内正常但部署后标签点击显示404，查看路径后发现路径为/Tags的可以用，但默认为/tags，当初使用Tags是因为教程，将大写改为小写 重新部署，仍然404，删除原tags文件，新建页面tags，部署，仍然404</p>
+<h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><p>修改git设置不忽略大小写</p>
+<p>进入博库目录<code>cd .deploy_git</code> ，修改.git文件中的config，将<code>ignorecase=true</code>改为<code>false</code></p>
+<p>重新部署</p>
+<p>如果还未解决，而本地使用正常，选择清空部署到github上的文件，重新发布</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd .deploy_git</span><br><span class="line">git rm -rf *</span><br><span class="line">git commit -m &#39;clean all file&#39;</span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+
+<p>重新部署hexo即可</p>
 
                 <hr>
                 
@@ -220,7 +228,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#The-Question-of-Hexo"><span class="toc-text">The Question of Hexo</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#404"><span class="toc-text">404</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#解决办法"><span class="toc-text">解决办法</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
         </div>
