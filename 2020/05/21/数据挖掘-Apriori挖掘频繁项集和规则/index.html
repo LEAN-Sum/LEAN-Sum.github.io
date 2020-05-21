@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="My Cool Description.">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="LeeSum" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        数据挖掘__Apriori挖掘频繁项集和规则｜Keep Study
+        
+    </title>
+
+    <link rel="canonical" href="http://LEAN-Sum.github.io/2020/05/21/数据挖掘-Apriori挖掘频繁项集和规则/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/blog-style.css">
+
+
+    <!-- Pygments Github CSS -->
+    
+<link rel="stylesheet" href="/css/syntax.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://pic.yupoo.com/leesum079/82e43398/ffb58a52.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    LeeSum
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://pic.yupoo.com/leesum079/82e43398/ffb58a52.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://pic.yupoo.com/leesum079/82e43398/ffb58a52.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>数据挖掘__Apriori挖掘频繁项集和规则</h1>
+                    
+                    <span class="meta">
+                         作者 LeeSum
+                        <span>
+                          日期 2020-05-21
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#School"
+                           title="School">School</a>
+                        
+                        <a class="tag" href="/tags/#Data-mining"
+                           title="Data-mining">Data-mining</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            数据挖掘__Apriori挖掘频繁项集和规则
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h4 id="频繁项集的挖掘"><a href="#频繁项集的挖掘" class="headerlink" title="频繁项集的挖掘"></a>频繁项集的挖掘</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="comment"># C1 是大小为1的所有候选项集的集合</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createC1</span><span class="params">(dataSet)</span>:</span></span><br><span class="line">    C1 = []</span><br><span class="line">    <span class="keyword">for</span> transaction <span class="keyword">in</span> dataSet:</span><br><span class="line">        <span class="keyword">for</span> item <span class="keyword">in</span> transaction:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> [item] <span class="keyword">in</span> C1:</span><br><span class="line">                C1.append([item]) <span class="comment">#store all the item unrepeatly</span></span><br><span class="line"></span><br><span class="line">    C1.sort()</span><br><span class="line">    <span class="comment">#return map(frozenset, C1)#frozen set, user can't change it.</span></span><br><span class="line">    <span class="keyword">return</span> list(map(frozenset, C1))</span><br><span class="line"><span class="comment">#该函数用于从 C1 生成 L1 。</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">scanD</span><span class="params">(D,Ck,minSupport=<span class="number">0.3</span>)</span>:</span></span><br><span class="line"><span class="comment">#参数：数据集、候选项集列表 Ck以及感兴趣项集的最小支持度 minSupport</span></span><br><span class="line">    ssCnt=&#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> tid <span class="keyword">in</span> D:<span class="comment">#遍历数据集</span></span><br><span class="line">        <span class="keyword">for</span> can <span class="keyword">in</span> Ck:<span class="comment">#遍历候选项</span></span><br><span class="line">            <span class="keyword">if</span> can.issubset(tid):<span class="comment">#判断候选项中是否含数据集的各项</span></span><br><span class="line">                <span class="comment">#if not ssCnt.has_key(can): # python3 can not support</span></span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> can <span class="keyword">in</span> ssCnt:</span><br><span class="line">                    ssCnt[can]=<span class="number">1</span> <span class="comment">#不含设为1</span></span><br><span class="line">                <span class="keyword">else</span>: ssCnt[can]+=<span class="number">1</span><span class="comment">#有则计数加1</span></span><br><span class="line">    numItems=float(len(D))<span class="comment">#数据集大小</span></span><br><span class="line">    retList = []<span class="comment">#L1初始化</span></span><br><span class="line">    supportData = &#123;&#125;<span class="comment">#记录候选项中各个数据的支持度</span></span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> ssCnt:</span><br><span class="line">        support = ssCnt[key]/numItems<span class="comment">#计算支持度</span></span><br><span class="line">        <span class="keyword">if</span> support &gt;= minSupport:</span><br><span class="line">            retList.insert(<span class="number">0</span>,key)<span class="comment">#满足条件加入L1中</span></span><br><span class="line">        supportData[key] = support</span><br><span class="line">    <span class="keyword">return</span> retList, supportData</span><br><span class="line"><span class="comment">#total apriori</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">aprioriGen</span><span class="params">(Lk, k)</span>:</span> <span class="comment">#组合，向上合并</span></span><br><span class="line">    <span class="comment">#creates Ck 参数：频繁项集列表 Lk 与项集元素个数 k</span></span><br><span class="line">    retList = []</span><br><span class="line">    lenLk = len(Lk)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(lenLk):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>, lenLk): <span class="comment">#两两组合遍历</span></span><br><span class="line">            L1 = list(Lk[i])[:k<span class="number">-2</span>]; L2 = list(Lk[j])[:k<span class="number">-2</span>]</span><br><span class="line">            L1.sort(); L2.sort()</span><br><span class="line">            <span class="keyword">if</span> L1==L2: <span class="comment">#若两个集合的前k-2个项相同时,则将两个集合合并</span></span><br><span class="line">                retList.append(Lk[i] | Lk[j]) <span class="comment">#set union</span></span><br><span class="line">    <span class="keyword">return</span> retList</span><br><span class="line"></span><br><span class="line"><span class="comment">#apriori</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">apriori</span><span class="params">(dataSet, minSupport = <span class="number">0.3</span>)</span>:</span></span><br><span class="line">    C1 = createC1(dataSet)</span><br><span class="line">    D = list(map(set, dataSet)) <span class="comment">#python3</span></span><br><span class="line">    L1, supportData = scanD(D, C1, minSupport)<span class="comment">#单项最小支持度判断 0.5，生成L1</span></span><br><span class="line">    L = [L1]</span><br><span class="line">    k = <span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> (len(L[k<span class="number">-2</span>]) &gt; <span class="number">0</span>):<span class="comment">#创建包含更大项集的更大列表,直到下一个大的项集为空</span></span><br><span class="line">        Ck = aprioriGen(L[k<span class="number">-2</span>], k)<span class="comment">#Ck</span></span><br><span class="line">        Lk, supK = scanD(D, Ck, minSupport)<span class="comment">#get Lk</span></span><br><span class="line">        supportData.update(supK)</span><br><span class="line">        L.append(Lk)</span><br><span class="line">        k += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> L, supportData</span><br></pre></td></tr></table></figure>
+
+<h4 id="规则的挖掘"><a href="#规则的挖掘" class="headerlink" title="规则的挖掘"></a>规则的挖掘</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#生成关联规则</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generateRules</span><span class="params">(L, supportData, minConf=<span class="number">0.9</span>)</span>:</span></span><br><span class="line">    <span class="comment">#频繁项集列表、包含那些频繁项集支持数据的字典、最小可信度阈值</span></span><br><span class="line">    bigRuleList = [] <span class="comment">#存储所有的关联规则</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(L)):  <span class="comment">#只获取有两个或者更多集合的项目，从1,即第二个元素开始，L[0]是单个元素的</span></span><br><span class="line">        <span class="comment"># 两个及以上的才可能有关联一说，单个元素的项集不存在关联问题</span></span><br><span class="line">        <span class="keyword">for</span> freqSet <span class="keyword">in</span> L[i]:</span><br><span class="line">            H1 = [frozenset([item]) <span class="keyword">for</span> item <span class="keyword">in</span> freqSet]</span><br><span class="line">            <span class="comment">#该函数遍历L中的每一个频繁项集并对每个频繁项集创建只包含单个元素集合的列表H1</span></span><br><span class="line">            <span class="keyword">if</span> (i &gt; <span class="number">1</span>):</span><br><span class="line">            <span class="comment">#如果频繁项集元素数目超过2,那么会考虑对它做进一步的合并</span></span><br><span class="line">                rulesFromConseq(freqSet, H1, supportData, bigRuleList, minConf)</span><br><span class="line">            <span class="keyword">else</span>:<span class="comment">#第一层时，后件数为1</span></span><br><span class="line">                calcConf(freqSet, H1, supportData, bigRuleList, minConf)<span class="comment"># 调用函数2</span></span><br><span class="line">    <span class="keyword">return</span> bigRuleList</span><br><span class="line"></span><br><span class="line"><span class="comment">#生成候选规则集合：计算规则的可信度以及找到满足最小可信度要求的规则</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calcConf</span><span class="params">(freqSet, H, supportData, brl, minConf=<span class="number">0.9</span>)</span>:</span></span><br><span class="line">    <span class="comment">#针对项集中只有两个元素时，计算可信度</span></span><br><span class="line">    prunedH = []<span class="comment">#返回一个满足最小可信度要求的规则列表</span></span><br><span class="line">    <span class="keyword">for</span> conseq <span class="keyword">in</span> H:<span class="comment">#后件，遍历 H中的所有项集并计算它们的可信度值</span></span><br><span class="line">        conf = supportData[freqSet]/supportData[freqSet-conseq] <span class="comment">#可信度计算，结合支持度数据</span></span><br><span class="line">        <span class="keyword">if</span> conf &gt;= minConf:</span><br><span class="line">            <span class="keyword">print</span> (freqSet-conseq,<span class="string">'--&gt;'</span>,conseq,<span class="string">'conf:'</span>,conf)</span><br><span class="line">            <span class="comment">#如果某条规则满足最小可信度值,那么将这些规则输出到屏幕显示</span></span><br><span class="line">            brl.append((freqSet-conseq, conseq, conf))<span class="comment">#添加到规则里，brl 是前面通过检查的 bigRuleList</span></span><br><span class="line">            prunedH.append(conseq)<span class="comment">#同样需要放入列表到后面检查</span></span><br><span class="line">    <span class="keyword">return</span> prunedH</span><br><span class="line"></span><br><span class="line"><span class="comment">#合并</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rulesFromConseq</span><span class="params">(freqSet, H, supportData, brl, minConf=<span class="number">0.9</span>)</span>:</span></span><br><span class="line">    <span class="comment">#参数:一个是频繁项集,另一个是可以出现在规则右部的元素列表 H</span></span><br><span class="line">    m = len(H[<span class="number">0</span>])</span><br><span class="line">    <span class="keyword">if</span> (len(freqSet) &gt; (m + <span class="number">1</span>)): <span class="comment">#频繁项集元素数目大于单个集合的元素数</span></span><br><span class="line">        Hmp1 = aprioriGen(H, m+<span class="number">1</span>)<span class="comment">#存在不同顺序、元素相同的集合，合并具有相同部分的集合</span></span><br><span class="line">        Hmp1 = calcConf(freqSet, Hmp1, supportData, brl, minConf)<span class="comment">#计算可信度</span></span><br><span class="line">        <span class="keyword">if</span> (len(Hmp1) &gt; <span class="number">1</span>):    </span><br><span class="line">        <span class="comment">#满足最小可信度要求的规则列表多于1,则递归来判断是否可以进一步组合这些规则</span></span><br><span class="line">            rulesFromConseq(freqSet, Hmp1, supportData, brl, minConf)</span><br></pre></td></tr></table></figure>
+
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2020/05/21/媒体数据管理-PCA变换/" data-toggle="tooltip" data-placement="top"
+                           title="媒体数据管理__PCA变换">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2020/05/21/数据挖掘-决策树/" data-toggle="tooltip" data-placement="top"
+                           title="数据挖掘__决策树">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#频繁项集的挖掘"><span class="toc-text">频繁项集的挖掘</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#规则的挖掘"><span class="toc-text">规则的挖掘</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#School"
+                           title="School">School</a>
+                        
+                        <a class="tag" href="/tags/#Data-mining"
+                           title="Data-mining">Data-mining</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/feng-qi-shi-11-79">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/LEAN-Sum">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; LeeSum 2020
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/" target="_blank" rel="noopener">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/blog.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://LEAN-Sum.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://pic.yupoo.com/leesum079/11fc869b/0da97f72.jpg">
+</body>
+
+</html>
