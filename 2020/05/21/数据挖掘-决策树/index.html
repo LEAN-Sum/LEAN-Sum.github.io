@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Hello World｜Keep Study
+        数据挖掘__决策树｜Keep Study
         
     </title>
 
-    <link rel="canonical" href="http://LEAN-Sum.github.io/2020/05/20/hello-world/">
+    <link rel="canonical" href="http://LEAN-Sum.github.io/2020/05/21/数据挖掘-决策树/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -151,15 +151,21 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Hello World</h1>
+                    <h1>数据挖掘__决策树</h1>
                     
                     <span class="meta">
                          作者 LeeSum
                         <span>
-                          日期 2020-05-20
+                          日期 2020-05-21
                          </span>
                     </span>
                     <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#School"
+                           title="School">School</a>
+                        
+                        <a class="tag" href="/tags/#Data-mining"
+                           title="Data-mining">Data-mining</a>
                         
                     </div>
                 </div>
@@ -168,7 +174,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Hello World
+            数据挖掘__决策树
         </span>
     </div>
 </header>
@@ -179,19 +185,8 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+                <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 计算熵</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">calent</span><span class="params">(dataset)</span>:</span></span><br><span class="line">    n = dataset.shape[<span class="number">0</span>]           <span class="comment">#注意shape的中括号</span></span><br><span class="line">    nclass = dataset.iloc[:,<span class="number">-1</span>].value_counts()</span><br><span class="line">    p = nclass/n</span><br><span class="line">    ent = (-p*np.log2(p)).sum()</span><br><span class="line">    <span class="keyword">return</span> ent</span><br><span class="line"><span class="comment"># 计算当前数据集的最佳分割列</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">best_split</span><span class="params">(dataset)</span>:</span></span><br><span class="line">    baseent = calent(dataset)</span><br><span class="line">    bestgain = <span class="number">0</span></span><br><span class="line">    axis = <span class="number">0</span></span><br><span class="line">    <span class="comment"># 对于每一个属性都进行信息增益的计算 并找到最大的信息增益的列返回其列值</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(dataset.shape[<span class="number">1</span>]<span class="number">-1</span>):</span><br><span class="line">        <span class="comment"># levels 为该列所有的可能属性值 ents记录各属性值的熵和</span></span><br><span class="line">        levels = dataset.iloc[:,i].value_counts().index</span><br><span class="line">        ents = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> levels:</span><br><span class="line">            <span class="comment"># childset 为该列中属性值为j的数据的集合 对其进行香农熵计算</span></span><br><span class="line">            childset = dataset[dataset.iloc[:,i]==j]</span><br><span class="line">            ent = calent(childset)</span><br><span class="line">            ents += (childset.shape[<span class="number">0</span>]/dataset.shape[<span class="number">0</span>])*ent</span><br><span class="line">        <span class="comment"># 更新信息增益</span></span><br><span class="line">        infogain = baseent - ents</span><br><span class="line">        <span class="keyword">if</span> (infogain&gt;bestgain):</span><br><span class="line">            bestgain = infogain</span><br><span class="line">            axis = i</span><br><span class="line">    <span class="keyword">return</span> axis</span><br><span class="line"><span class="comment">#定义一个划分数据集的方法 返回属性第axis列中属性值为value的数据集合 且不含原第axis列</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mysplit</span><span class="params">(dataset,axis,value)</span>:</span></span><br><span class="line">    col = dataset.columns[axis]</span><br><span class="line">    redataset = dataset.loc[dataset[col]==value,:].drop(col,axis=<span class="number">1</span>)</span><br><span class="line">    redataset = redataset.reset_index(drop = <span class="literal">True</span>) <span class="comment"># 更新索引</span></span><br><span class="line">    <span class="keyword">return</span> redataset</span><br><span class="line"><span class="comment">#使用递归的方法构建一棵树</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">createtree</span><span class="params">(dataset, depth = <span class="number">0</span>)</span>:</span></span><br><span class="line">    <span class="comment"># 所有属性列的集合 以及总的分布情况</span></span><br><span class="line">    colum_all_feature = list(dataset.columns)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> colum_all_feature:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    classlist = dataset.iloc[:,<span class="number">-1</span>].value_counts()  <span class="comment">#会按照从高到低的顺序进行排列</span></span><br><span class="line">    print(colum_all_feature)</span><br><span class="line">    <span class="comment"># 当仅有一种属性值时 或者 只有一种属性时 此时可直接分类 </span></span><br><span class="line">    <span class="comment"># 限制最大深度</span></span><br><span class="line">    <span class="keyword">if</span> depth&gt;=<span class="number">10</span> <span class="keyword">or</span> len(colum_all_feature)==<span class="number">1</span> <span class="keyword">or</span> classlist[classlist.index[<span class="number">0</span>]] == dataset.shape[<span class="number">0</span>] <span class="keyword">or</span> dataset.shape[<span class="number">1</span>]==<span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> classlist.index[<span class="number">0</span>]</span><br><span class="line">    <span class="comment"># 获取最佳分类的位置和属性名称</span></span><br><span class="line">    axis = best_split(dataset)</span><br><span class="line">    bestfeature = colum_all_feature[axis]</span><br><span class="line">    <span class="comment"># 初始化以当前节点起始的决策树</span></span><br><span class="line">    mytree = &#123;bestfeature:&#123;&#125;&#125;</span><br><span class="line">    <span class="comment"># 将已经入树的属性删除</span></span><br><span class="line">    <span class="keyword">del</span> colum_all_feature[axis]</span><br><span class="line">    <span class="comment"># 当前最佳分类属性的可能属性值</span></span><br><span class="line">    valuelist = set(dataset.iloc[:,axis]) </span><br><span class="line">    <span class="comment"># 对每个可能属性值进行建树分类</span></span><br><span class="line">    <span class="keyword">for</span> value <span class="keyword">in</span> valuelist:</span><br><span class="line">        mytree[bestfeature][value] = createtree(mysplit(dataset,axis,value), depth+<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> mytree</span><br><span class="line"><span class="comment">#将数在测试集上进行测试</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">classy</span><span class="params">(inputtree,labels,testvec)</span>:</span>            <span class="comment">#判断其中的一条向量</span></span><br><span class="line">    firststr = next(iter(inputtree))</span><br><span class="line">    seconddict = inputtree[firststr]</span><br><span class="line">    featindex = labels.index(firststr)</span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> seconddict.keys():</span><br><span class="line">        <span class="keyword">if</span> testvec[featindex]==key:</span><br><span class="line">            <span class="keyword">if</span> type(seconddict[key])==dict:</span><br><span class="line">                <span class="keyword">return</span> classy(seconddict[key],labels,testvec)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> seconddict[key]</span><br><span class="line">    <span class="keyword">return</span> <span class="string">"error"</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 
                 <hr>
                 
@@ -199,10 +194,15 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2020/05/20/网络应用程序设计-Windows下的socket编程/" data-toggle="tooltip" data-placement="top"
-                           title="网络应用程序设计__Windows下的socket编程">&larr; Previous Post</a>
+                        <a href="/2020/05/21/数据挖掘-Apriori挖掘频繁项集和规则/" data-toggle="tooltip" data-placement="top"
+                           title="数据挖掘__Apriori挖掘频繁项集和规则">&larr; Previous Post</a>
                     </li>
                     
+                    
+                    <li class="next">
+                        <a href="/2020/05/21/网络应用程序设计-Android与PC利用Socket通信/" data-toggle="tooltip" data-placement="top"
+                           title="网络应用程序设计__Android与PC利用Socket通信">Next Post &rarr;</a>
+                    </li>
                     
                 </ul>
 
@@ -220,7 +220,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+                    
                 </div>
             </div>
         </div>
