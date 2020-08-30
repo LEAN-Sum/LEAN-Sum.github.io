@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="My Cool Description.">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="LeeSum" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        媒体数据管理__LSH算法的原理及实现｜Keep Study
+        
+    </title>
+
+    <link rel="canonical" href="http://LEAN-Sum.github.io/2020/05/27/媒体数据管理-LSH算法的原理及实现/">
+
+    <!-- Bootstrap Core CSS -->
+    
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/blog-style.css">
+
+
+    <!-- Pygments Github CSS -->
+    
+<link rel="stylesheet" href="/css/syntax.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://pic.yupoo.com/leesum079/82e43398/ffb58a52.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    LeeSum
+                </span>
+                's Blog
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/tags/">tags</a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://pic.yupoo.com/leesum079/82e43398/ffb58a52.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://pic.yupoo.com/leesum079/82e43398/ffb58a52.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>媒体数据管理__LSH算法的原理及实现</h1>
+                    
+                    <span class="meta">
+                         作者 LeeSum
+                        <span>
+                          日期 2020-05-27
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#School"
+                           title="School">School</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            媒体数据管理__LSH算法的原理及实现
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h3 id="LSH算法原理"><a href="#LSH算法原理" class="headerlink" title="LSH算法原理"></a>LSH算法原理</h3><h4 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h4><p>LSH(Location Sensitive Hash),即位置敏感哈希函数/局部敏感哈希。与一般哈希函数不同的是位置敏感性，也就是散列前的相似点经过哈希之后，也能够在一定程度上相似，并且具有一定的概率保证。</p>
+<p>在信息检索，数据挖掘以及推荐系统等应用中，我们经常会遇到的一个问题就是面临着海量的高维数据，查找最近邻。如果使用线性查找，那么对于低维数据效率尚可，而对于高维数据，就显得非常耗时了。为了解决这样的问题，人们设计了一种特殊的hash函数，使得2个相似度很高的数据以较高的概率映射成同一个hash值，而令2个相似度很低的数据以极低的概率映射成同一个hash值。我们把这样的函数，叫做LSH（局部敏感哈希）。LSH最根本的作用，就是能高效处理海量高维数据的最近邻问题</p>
+<p>我们将这样一族hash函数$H={h:S\rightarrow U}$称为是$(r_1,r_2,p_1,p_2)$敏感的，如果对于任意H中的函数h，满足如下两个条件:</p>
+<ol>
+<li><p>$if\ d(O_1,O_2)&lt;r_1,then\ Pr[h(O_1)=h(O_2)]\geq p_1$</p>
+</li>
+<li><p>$if\ d(O_1,O_2)&gt;r_2,then\ Pr[h(O_1)=h(O_2)]\leq p_2$</p>
+</li>
+</ol>
+<p>也可以描述为对于$O_1,O2$两个数据对象，当足够相似时，映射为同一hash值的概率足够大，而足够不相似时，映射为同一hash值的概率足够小</p>
+<p>关于相似度的定义参考<a href="http://blog.csdn.net/guoziqing506/article/details/51779536" target="_blank" rel="noopener">数据相似性的度量方法总结</a></p>
+<p>这里主要参考两种LSH常用的相似度度量方法:</p>
+<ol>
+<li>使用Jaccard系数度量数据相似度时的min-hash</li>
+<li>使用欧氏距离度量数据相似度时的P-stable hash</li>
+</ol>
+<p>基于这些度量方式的LSH算法都是将高维数据降维到低维数据，同时，还能在一定程度上，保持原始数据的相似度不变。LSH不是确定性的，而是概率性的，也就是说有一定的概率导致原本很相似的数据映射成2个不同的hash值，或者原本不相似的数据映射成同一hash值。这是高维数据降维过程中所不能避免的（因为降维势必会造成某种程度上数据的失真），不过好在LSH的设计能够通过相应的参数控制出现这种错误的概率，这也是LSH为什么被广泛应用的原因。</p>
+<h4 id="min-hash"><a href="#min-hash" class="headerlink" title="min-hash"></a>min-hash</h4><h5 id="hash函数的选择"><a href="#hash函数的选择" class="headerlink" title="hash函数的选择"></a>hash函数的选择</h5><p>Jaccard系数主要用来解决的是非对称二元属性相似度的度量问题，常用的场景是度量2个集合之间的相似度，定义公式为$J(A,B)=\frac{|A\cap B|}{|A\cup B|}=\frac{|A\cap B|}{|A|+||B-|A\cap B|}$</p>
+<p>min-hash实际上通过自己的函数实现Jaccard的距离</p>
+<h4 id="P-stable"><a href="#P-stable" class="headerlink" title="P-stable"></a>P-stable</h4><p>P-stable是通过正态分布等对数据进行索引，通过矩阵变换来将高维数据转换成低维数据并将之作为索引，本文仅考虑单个hash表的情况，在生成索引表的过程中，需要给定一个向量数n来确定数据被降维后的维数，然后利用这个n以及原有数据的维度生成一个随机的符合正态分布的矩阵。假定原有数据的维数是r*c，通过点乘这个矩阵来变成r *n的随机向量矩阵，这里的随机是相对而言，确定了c *r的正态分布矩阵即可确定这个矩阵，然后再根据n生成一个n *1维向量，为了简单起见，使用二的次幂作为向量的元素，然后将r *n矩阵点乘 n *1向量，将原有数据经过两次变换索引成一个r *1的向量，这个向量中的元素是有重复的，对应原始数据中的每一行，这些元素就是索引值，对应的行就是索引对应的数据。</p>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> copy <span class="keyword">import</span> copy</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> combinations</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> pandas <span class="keyword">import</span> DataFrame</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> pairwise_distances</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LSH</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, data)</span>:</span></span><br><span class="line">        self.data = data</span><br><span class="line">        self.model = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__generate_random_vectors</span><span class="params">(self, num_vector, dim)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> np.random.randn(dim, num_vector)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">train</span><span class="params">(self, num_vector, seed=None)</span>:</span></span><br><span class="line">        dim = self.data.shape[<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">if</span> seed <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            np.random.seed(seed)</span><br><span class="line">        </span><br><span class="line">        random_vectors = self.__generate_random_vectors(num_vector, dim)</span><br><span class="line">        <span class="comment"># 512 256 128 64 32 16 8 4 2 1 </span></span><br><span class="line">        powers_of_two = <span class="number">1</span> &lt;&lt; np.arange(num_vector - <span class="number">1</span>, <span class="number">-1</span>, <span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">        table = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Partition data points into bins</span></span><br><span class="line">        bin_index_bits = (self.data.dot(random_vectors) &gt;= <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Encode bin index bits into integers</span></span><br><span class="line">        bin_indices = bin_index_bits.dot(powers_of_two)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Update `table` so that `table[i]` is the list of document ids with bin index equal to i.</span></span><br><span class="line">        <span class="keyword">for</span> data_index, bin_index <span class="keyword">in</span> enumerate(bin_indices):</span><br><span class="line">            <span class="keyword">if</span> bin_index <span class="keyword">not</span> <span class="keyword">in</span> table:</span><br><span class="line">                <span class="comment"># If no list yet exists for this bin, assign the bin an empty list.</span></span><br><span class="line">                table[bin_index] = []</span><br><span class="line">            <span class="comment"># Fetch the list of document ids associated with the bin and add the document id to the end.</span></span><br><span class="line">            table[bin_index].append(data_index)</span><br><span class="line"></span><br><span class="line">        self.model = &#123;<span class="string">'bin_indices'</span>: bin_indices, <span class="string">'table'</span>: table,</span><br><span class="line">                      <span class="string">'random_vectors'</span>: random_vectors, <span class="string">'num_vector'</span>: num_vector&#125;</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__search_nearby_bins</span><span class="params">(self, query_bin_bits, table, search_radius=<span class="number">2</span>, initial_candidates=set<span class="params">()</span>)</span>:</span></span><br><span class="line">        num_vector = self.model[<span class="string">'num_vector'</span>]</span><br><span class="line">        powers_of_two = <span class="number">1</span> &lt;&lt; np.arange(num_vector - <span class="number">1</span>, <span class="number">-1</span>, <span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Allow the user to provide an initial set of candidates.</span></span><br><span class="line">        candidate_set = copy(initial_candidates)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> different_bits <span class="keyword">in</span> combinations(range(num_vector), search_radius):</span><br><span class="line">            alternate_bits = copy(query_bin_bits)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> different_bits:</span><br><span class="line">                alternate_bits[i] = <span class="number">1</span> <span class="keyword">if</span> alternate_bits[i] == <span class="number">0</span> <span class="keyword">else</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line">            <span class="comment"># Convert the new bit vector to an integer index</span></span><br><span class="line">            nearby_bin = alternate_bits.dot(powers_of_two)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Fetch the list of documents belonging to the bin indexed by the new bit vector.</span></span><br><span class="line">            <span class="comment"># Then add those documents to candidate_set</span></span><br><span class="line">            <span class="keyword">if</span> nearby_bin <span class="keyword">in</span> table:</span><br><span class="line">                candidate_set.update(table[nearby_bin])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> candidate_set</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">query</span><span class="params">(self, query_vec, k, max_search_radius)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.model:</span><br><span class="line">            print(<span class="string">'Model not yet build. Exiting!'</span>)</span><br><span class="line">            exit(<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">        data = self.data</span><br><span class="line">        table = self.model[<span class="string">'table'</span>]</span><br><span class="line">        random_vectors = self.model[<span class="string">'random_vectors'</span>]</span><br><span class="line">        initial_candidates=set()</span><br><span class="line"></span><br><span class="line">        bin_index_bits = (query_vec.dot(random_vectors) &gt;= <span class="number">0</span>).flatten()</span><br><span class="line"></span><br><span class="line">        candidate_set = set()</span><br><span class="line">        <span class="comment"># Search nearby bins and collect candidates</span></span><br><span class="line">        <span class="keyword">for</span> search_radius <span class="keyword">in</span> range(max_search_radius + <span class="number">1</span>):</span><br><span class="line">            candidate_set = self.__search_nearby_bins(bin_index_bits, table,</span><br><span class="line">                                                      search_radius, initial_candidates=initial_candidates)</span><br><span class="line">            initial_candidates = candidate_set</span><br><span class="line">        <span class="comment"># Sort candidates by their true distances from the query</span></span><br><span class="line">        nearest_neighbors = DataFrame(&#123;<span class="string">'id'</span>: list(candidate_set)&#125;)</span><br><span class="line">        candidates = data[np.array(list(candidate_set)), :]</span><br><span class="line">        nearest_neighbors[<span class="string">'distance'</span>] = pairwise_distances(candidates, query_vec.reshape(<span class="number">1</span>,<span class="number">-1</span>), metric=<span class="string">'cosine'</span>).flatten()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> nearest_neighbors.nsmallest(k, <span class="string">'distance'</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="通过遍历寻找合适的参数"><a href="#通过遍历寻找合适的参数" class="headerlink" title="通过遍历寻找合适的参数"></a>通过遍历寻找合适的参数</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br><span class="line">lsh_model = LSH(dataSet)</span><br><span class="line"><span class="comment"># test the num of random_vector</span></span><br><span class="line">history_norv = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>, <span class="number">15</span>):</span><br><span class="line">    lsh_model.train(i)</span><br><span class="line">    correct = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">        lsh_res = lsh_model.query(dataSet[i,:], <span class="number">11</span>, <span class="number">2</span>)[<span class="string">'id'</span>].values[<span class="number">1</span>:]</span><br><span class="line">        correct += len(np.intersect1d(lsh_res, real_index[i][<span class="number">1</span>:<span class="number">11</span>]))</span><br><span class="line">    history_norv.append(correct)</span><br><span class="line">BestNum = history_norv.index(max(history_norv))+<span class="number">5</span></span><br><span class="line"><span class="comment"># test the radius</span></span><br><span class="line">lsh_model.train(BestNum)</span><br><span class="line">history_radius = []</span><br><span class="line"><span class="keyword">for</span> radius <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">5</span>):</span><br><span class="line">    t = time.time()</span><br><span class="line">    correct = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">        lsh_res = lsh_model.query(dataSet[i,:], <span class="number">11</span>, radius)[<span class="string">'id'</span>].values[<span class="number">1</span>:]</span><br><span class="line">        correct += len(np.intersect1d(lsh_res, real_index[i][<span class="number">1</span>:<span class="number">11</span>]))</span><br><span class="line">    t = time.time()-t</span><br><span class="line">    history_radius.append((t, correct))</span><br><span class="line">radius_time = [i[<span class="number">0</span>] <span class="keyword">for</span> i <span class="keyword">in</span> history_radius]</span><br><span class="line">radius_right = [i[<span class="number">1</span>]/<span class="number">10000</span> <span class="keyword">for</span> i <span class="keyword">in</span> history_radius]</span><br><span class="line">fig, ax1 = plt.subplots()</span><br><span class="line">ax1.bar(range(<span class="number">5</span>), radius_time, label=<span class="string">"time"</span>)</span><br><span class="line">ax1.set_xlabel(<span class="string">"radius"</span>)</span><br><span class="line">ax1.set_ylabel(<span class="string">"time/s"</span>)</span><br><span class="line">ax1.set_ylim(min(radius_time)*<span class="number">0.8</span>, max(radius_time)*<span class="number">1.2</span>,)</span><br><span class="line">ax2 = ax1.twinx()</span><br><span class="line">ax2.plot(range(<span class="number">5</span>), radius_time, label=<span class="string">"right rate"</span>)</span><br><span class="line">ax2.set_ylabel(<span class="string">"accuracy rate"</span>)</span><br><span class="line">ax2.set_ylim(min(radius_right)*<span class="number">0.8</span>,<span class="number">1.1</span>)</span><br><span class="line">plt.plot(range(<span class="number">5</span>), radius_time, range(<span class="number">5</span>), radius_right)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+<p><img src="data:image/png;base64,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" alt="img"></p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2020/05/28/媒体数据管理-SIFT/" data-toggle="tooltip" data-placement="top"
+                           title="媒体数据管理__SIFT">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2020/05/25/数据挖掘-层次聚类/" data-toggle="tooltip" data-placement="top"
+                           title="数据挖掘__层次聚类">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+
+                
+
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#LSH算法原理"><span class="toc-text">LSH算法原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#min-hash"><span class="toc-text">min-hash</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#hash函数的选择"><span class="toc-text">hash函数的选择</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#P-stable"><span class="toc-text">P-stable</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#代码实现"><span class="toc-text">代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#通过遍历寻找合适的参数"><span class="toc-text">通过遍历寻找合适的参数</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#School"
+                           title="School">School</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/feng-qi-shi-11-79">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/LEAN-Sum">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; LeeSum 2020
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/" target="_blank" rel="noopener">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="/js/jquery.min.js"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+
+<script src="/js/bootstrap.min.js"></script>
+
+
+<!-- Custom Theme JavaScript -->
+
+<script src="/js/blog.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://LEAN-Sum.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','','2.0.0');
+</script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://pic.yupoo.com/leesum079/11fc869b/0da97f72.jpg">
+</body>
+
+</html>
