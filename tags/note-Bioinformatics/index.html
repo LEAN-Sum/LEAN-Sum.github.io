@@ -22,7 +22,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://LEAN-Sum.github.io/archives/page/2/">
+    <link rel="canonical" href="http://LEAN-Sum.github.io/tags/note-Bioinformatics/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -49,7 +49,7 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="true
 " data-ishome = "false" >
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -159,18 +159,18 @@
 
 <div class="post-preview "
      style="background-image: url('')">
-    <a href="/2020/05/21/媒体数据管理-PCA变换/">
+    <a href="/2021/07/18/Questions-about-the-discover-of-novel-class-in-scRna-seq-Data/">
         <h2 class="post-title">
-            媒体数据管理__PCA变换
+            Questions about the discover of novel class in scRna-seq Data
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-05-21
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2021-07-18
         </p>
         
         <div class="post-content-preview">
             <p>
-                主要代码
-# 协方差矩阵c = (data-data.mean()).cov().values# 均值 每一列/行mean_data1 = data.mean(axis=0).valuesmean_data2 = data.mean(axis=1).values# 计算协方差矩阵的特征向量和特征..
+                为了进行细胞类型的识别和新细胞类型的发现：
+​        首先，需要一个比较标准的细胞表示方法，目前而言，使用基因表达矩阵来表示细胞，但由于测序技术的不同，同一细胞类型不同来源的数据集中基因表达情况不同，但为了更好的进行分析，充分利用所有来源的数据集是必须的过程，此时我们需要考虑以下几个问题..
             </p>
         </div>
     </a>
@@ -183,17 +183,19 @@
 
 <div class="post-preview "
      style="background-image: url('')">
-    <a href="/2020/05/21/数据挖掘-Apriori挖掘频繁项集和规则/">
+    <a href="/2021/07/18/integrating-single-cell-data/">
         <h2 class="post-title">
-            数据挖掘__Apriori挖掘频繁项集和规则
+            integrating single-cell data
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-05-21
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2021-07-18
         </p>
         
         <div class="post-content-preview">
             <p>
-                频繁项集的挖掘from numpy import *# C1 是大小为1的所有候选项集的集合def createC1(dataSet):    C1 = []    for transaction in dataSet:        for item in transaction:      ..
+                Papers1、Liger(R)
+​        title : Single-Cell Multi-omic Integration Compares and Contrasts Features of Brain Cell Identity
+​        time : June 06,..
             </p>
         </div>
     </a>
@@ -206,114 +208,19 @@
 
 <div class="post-preview "
      style="background-image: url('')">
-    <a href="/2020/05/21/数据挖掘-决策树/">
+    <a href="/2021/07/18/scanpy学习笔记/">
         <h2 class="post-title">
-            数据挖掘__决策树
+            scanpy学习笔记
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-05-21
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2021-07-18
         </p>
         
         <div class="post-content-preview">
             <p>
-                # 计算熵def calent(dataset):    n = dataset.shape[0]           #注意shape的中括号    nclass = dataset.iloc[:,-1].value_counts()    p = nclass/n    ent = (-p*..
-            </p>
-        </div>
-    </a>
+                1、数据格式
+​    
 
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2020/05/21/网络应用程序设计-Android与PC利用Socket通信/">
-        <h2 class="post-title">
-            网络应用程序设计__Android与PC利用Socket/WIFI通信
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-05-21
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                Socket通信目标用手机模拟PC鼠标进行移动和点击
-方法使用socket建立长连接通信，通过touch事件和onClick事件传递手机端的触摸移动和点击事件
-python/java作为服务端，因为其具有较好的控制PC鼠标的库
-Java的socket输入输出流太过繁琐，最终用python实现se..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2020/05/20/today/">
-        <h2 class="post-title">
-            软件工程实践笔记
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-05-20
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                日程、统计、我的 
-具体的xml文件 3-4个Fragment 2个Adapter 1个DialogFragment 1个Activity
-涉及的控件：TextView Toolbar RecycleView FloatingActionButton (ViewPager/Framelayout..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2020/05/20/网络应用程序设计-Windows下的socket编程/">
-        <h2 class="post-title">
-            网络应用程序设计__Windows下的socket编程
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-05-20
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview "
-     style="background-image: url('')">
-    <a href="/2020/05/20/hello-world/">
-        <h2 class="post-title">
-            Hello World
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2020-05-20
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer i..
             </p>
         </div>
     </a>
@@ -328,10 +235,6 @@ Java的socket输入输出流太过繁琐，最终用python实现se..
 <!-- 翻页 pager -->
 
 <ul class="pager">
-    
-    <li class="previous">
-        <a href="/archives/">&larr; Newer Posts</a>
-    </li>
     
     
 </ul>

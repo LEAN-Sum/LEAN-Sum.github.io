@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        媒体数据管理__PCA变换｜Keep Study
+        scanpy学习笔记｜Keep Study
         
     </title>
 
-    <link rel="canonical" href="http://LEAN-Sum.github.io/2020/05/21/媒体数据管理-PCA变换/">
+    <link rel="canonical" href="http://LEAN-Sum.github.io/2021/07/18/scanpy学习笔记/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -151,18 +151,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>媒体数据管理__PCA变换</h1>
+                    <h1>scanpy学习笔记</h1>
                     
                     <span class="meta">
                          作者 LeeSum
                         <span>
-                          日期 2020-05-21
+                          日期 2021-07-18
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#School"
-                           title="School">School</a>
+                        <a class="tag" href="/tags/#note Bioinformatics"
+                           title="note Bioinformatics">note Bioinformatics</a>
                         
                     </div>
                 </div>
@@ -171,7 +171,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            媒体数据管理__PCA变换
+            scanpy学习笔记
         </span>
     </div>
 </header>
@@ -182,9 +182,8 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>主要代码</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 协方差矩阵</span></span><br><span class="line">c = (data-data.mean()).cov().values</span><br><span class="line"><span class="comment"># 均值 每一列/行</span></span><br><span class="line">mean_data1 = data.mean(axis=<span class="number">0</span>).values</span><br><span class="line">mean_data2 = data.mean(axis=<span class="number">1</span>).values</span><br><span class="line"><span class="comment"># 计算协方差矩阵的特征向量和特征值</span></span><br><span class="line"><span class="comment"># np.linalg.eig() 可以计算特征值和特征向量</span></span><br><span class="line">eig_vals, eig_vectors = np.linalg.eig(c)</span><br><span class="line"><span class="comment"># 将 特征值排序 并 取前n个特征值对应的特征向量</span></span><br><span class="line"><span class="comment"># np.argsort(x) 将x中的元素从小到大排列，输出其对应的index(索引)</span></span><br><span class="line">eig_vals_index = np.argsort(-eig_vals)</span><br><span class="line"><span class="comment"># 找到需要保留的维数n</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">findn</span><span class="params">(eig_vals)</span>:</span></span><br><span class="line">    sum_prop = sum(eig_vals)</span><br><span class="line">    n, prop = <span class="number">1</span>, <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(eig_vals)):</span><br><span class="line">        prop += eig_vals[i]</span><br><span class="line">        <span class="keyword">if</span> prop/sum_prop &lt;= <span class="number">0.95</span>:</span><br><span class="line">            n += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> n</span><br><span class="line"><span class="comment"># n 为要保留的维数 将样本投影到选择的特征向量上</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pcaToExample</span><span class="params">(n, eig_vals_index, eig_vectors, data)</span>:</span></span><br><span class="line">    temp = eig_vectors[:, eig_vals_index[:n]]</span><br><span class="line">    lowDimData = np.dot(data, temp)</span><br><span class="line">    <span class="keyword">return</span> lowDimData</span><br></pre></td></tr></table></figure>
-
+                <p>1、数据格式</p>
+<p>​    </p>
 
                 <hr>
                 
@@ -192,14 +191,14 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2020/05/21/媒体数据管理-K-means实现矢量量化/" data-toggle="tooltip" data-placement="top"
-                           title="媒体数据管理__K-means实现矢量量化">&larr; Previous Post</a>
+                        <a href="/2021/07/18/integrating-single-cell-data/" data-toggle="tooltip" data-placement="top"
+                           title="integrating single-cell data">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2020/05/21/数据挖掘-Apriori挖掘频繁项集和规则/" data-toggle="tooltip" data-placement="top"
-                           title="数据挖掘__Apriori挖掘频繁项集和规则">Next Post &rarr;</a>
+                        <a href="/2020/05/28/媒体数据管理-SIFT/" data-toggle="tooltip" data-placement="top"
+                           title="媒体数据管理__SIFT">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -240,8 +239,8 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#School"
-                           title="School">School</a>
+                        <a class="tag" href="/tags/#note Bioinformatics"
+                           title="note Bioinformatics">note Bioinformatics</a>
                         
                     </div>
                 </section>
