@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Questions about the discover of novel class in scRna-seq Data｜Keep Study
+        文献笔记 | scVI:Deep generative modeling for single-cell transcriptomics｜Keep Study
         
     </title>
 
-    <link rel="canonical" href="http://LEAN-Sum.github.io/2021/07/18/Questions-about-the-discover-of-novel-class-in-scRna-seq-Data/">
+    <link rel="canonical" href="http://LEAN-Sum.github.io/2021/07/25/文献笔记-scVI-Deep-generative-modeling-for-single-cell-transcriptomics/">
 
     <!-- Bootstrap Core CSS -->
     
@@ -151,18 +151,18 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Questions about the discover of novel class in scRna-seq Data</h1>
+                    <h1>文献笔记 | scVI:Deep generative modeling for single-cell transcriptomics</h1>
                     
                     <span class="meta">
                          作者 LeeSum
                         <span>
-                          日期 2021-07-18
+                          日期 2021-07-25
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#note Bioinformatics"
-                           title="note Bioinformatics">note Bioinformatics</a>
+                        <a class="tag" href="/tags/#Paper SC"
+                           title="Paper SC">Paper SC</a>
                         
                     </div>
                 </div>
@@ -171,7 +171,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Questions about the discover of novel class in scRna-seq Data
+            文献笔记 | scVI:Deep generative modeling for single-cell transcriptomics
         </span>
     </div>
 </header>
@@ -182,25 +182,70 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>为了进行细胞类型的识别和新细胞类型的发现：</p>
-<p>​        首先，需要一个比较标准的细胞表示方法，目前而言，使用基因表达矩阵来表示细胞，但由于测序技术的不同，同一细胞类型不同来源的数据集中基因表达情况不同，但为了更好的进行分析，充分利用所有来源的数据集是必须的过程，此时我们需要考虑以下几个问题：</p>
-<p>​            1、同一细胞类型不同来源的数据集中基因的数量和种类不同，在构建模型时，常规的做法中同一类型的细胞样本是具有普遍特征的，但现在根据这些基因种类和数量表达不同，在模型中很容易会被认为是不同的类；</p>
-<p>​            2、对于上一个问题，在基于深度学习的细胞嵌入方法中，会造成怎样的影响</p>
+                <h1 id="文献笔记-scVI-Deep-generative-modeling-for-single-cell-transcriptomics"><a href="#文献笔记-scVI-Deep-generative-modeling-for-single-cell-transcriptomics" class="headerlink" title="文献笔记 | scVI:Deep generative modeling for single-cell transcriptomics"></a>文献笔记 | scVI:Deep generative modeling for single-cell transcriptomics</h1><p>:link:<a href="https://doi.org/10.1038/s41592-018-0229-2" target="_blank" rel="noopener">https://doi.org/10.1038/s41592-018-0229-2</a></p>
+<p>:man:Romain Lopez, Jeffrey Regier  , Michael B. Cole, Michael I. Jordan and Nir Yosef  </p>
+<p>:clock1: ​30 NOV 2018</p>
+<h1 id="0-Summary"><a href="#0-Summary" class="headerlink" title="0. Summary"></a>0. Summary</h1><p>​        单细胞测序数据将人们对生物特性的认知细化到了细胞层面，极大地促进了生物发现的进程。但是这种“高分辨率”的信息捕获技术也有着自身的局限性，比如测量灵敏度的不确定性，批次效应（batch effect，指即便是同一种细胞同一测序技术不同次的测序结果也存在着偏差），还有技术本身带来的噪声等等，进而影响了基于单细胞测序技术的下游分析的质量，比如细胞聚类（可以找到一组细胞中的常见子类，并发现新的子类或者亚群）、基因差异表达（找到不同细胞群之间表达量显著差异的基因）、轨迹分析（trajectory analysis，研究细胞发展变化的过程）等等。</p>
+<p>​        scvi提出了基于深度神经网络的层次贝叶斯模型 (Hierarchical Bayesian Model) 来解决这些问题，其中贝叶斯模型中的条件概率由神经网络来实现。这是一个生成式模型，模型结构如下图所示，将scRNA-seq数据中每个细胞作为一个样本，其基因表达作为特征，通过encoder的神经网络与重参数化将高维的基因表示压缩到低维隐空间（比如说10维）；之后基于单细胞RNA测序数据基因表达量服从零膨胀负二项分布 (ZINB) 的假设，再利用decoder的神经网络将隐空间映射到基因表达分布参数的后验估计上。scvi的两大优势在于：</p>
+<ol>
+<li>模型考虑了scRNA-seq数据中的两大问题：library size 和 batch effect</li>
+<li>利用<strong>单一</strong>生成式模型为一系列的下游分析提供了数据基础</li>
+</ol>
+<h2 id="1-Problem-amp-Objective"><a href="#1-Problem-amp-Objective" class="headerlink" title="1. Problem &amp; Objective"></a>1. Problem &amp; Objective</h2><ul>
+<li>technical noise and bias brings uncertainty</li>
+<li><strong>scVI</strong>(single-cell variational inference) , a fully probabilistic approach for the normalization and analysis of scRNA-seq data, has been used for a range of fundamental analysis tasks including batch  correction, visualization, clustering, and differential expression, and achieved high accuracy for each task.</li>
+<li>单细胞转录组测量可以揭示未开发的生物多样性，但它们受到技术噪音和偏差的影响，必须建模以解释下游分析中产生的不确定性。</li>
+</ul>
+<h2 id="2-Method-amp-Process"><a href="#2-Method-amp-Process" class="headerlink" title="2. Method &amp; Process"></a>2. Method &amp; Process</h2><ul>
+<li>Based on a hierarchical Bayesian model with conditional distributions specified by deep neural networks,  scVI <strong>encoded the cell transcription data via a nonlinear transformation to low-dim vector.</strong>  The transformation assumes a zero-inflated negative binomial distribution.</li>
+<li><strong>Embedding</strong> scRNA-seq datasets: 降维+突出细胞类型的特征</li>
+<li>scVI 使用随机优化和深度神经网络来聚合相似细胞和基因的信息，并近似观察到的表达值的分布，同时考虑批次效应和有限的灵敏度。</li>
+<li><strong>scVI Model</strong><ul>
+<li>本文中，对于每个细胞 $n$ 中的每个基因 $g$ 的观察表达值 $ x_{ng} $建模为一个样本，假定取自零膨胀的负二项分布(ZINB): ==$p(x_{ng}|z_n,s_n,ℓ_n)$==<ul>
+<li>变量$ℓ_n$是一维高斯分布，表示由于捕获效率和测序深度的差异而导致的有害变化，并作为细胞特异性的比例因子 | 表示数据的尺度scale</li>
+<li>变量$z_n$是低维高斯变量(10维)，表示更能能反映细胞之间生物学差异的变量 | 数据压缩、降维后的表示 </li>
+<li>变量$s_n$表示每个细胞的注释状态</li>
+</ul>
+</li>
+<li>通过神经网络将变量映射到ZINB分布的参数上<ul>
+<li>这种映射通过一个中间值 ==$ρ^n_g$== 进行, 为每个细胞$n$中每个基因$g$提供转录物百分比的批次校正的、标准化的估计值</li>
+<li>使用这些估计值进行差异化表达分析及后续工作，</li>
+</ul>
+</li>
+<li>通过变分推理和一个可扩展的随机优化过程训练神经网络以得到一个潜在变量 ==$q(z_n, logℓ_n|x_m, s_n)$==的后验分布的近似</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-Evaluate"><a href="#3-Evaluate" class="headerlink" title="3. Evaluate"></a>3. Evaluate</h2><ul>
+<li>设置缺失值，==评估准确估算缺失值的能力==<ul>
+<li>结果有效，反向证明了负向二分布的适用性</li>
+<li>对于样本数量较少的情况效果可能不佳</li>
+</ul>
+</li>
+<li>由于网络结构实际上较浅，所以能较快的进行训练；同时也能对大规模的数据进行适用</li>
+<li>与其他概率建模方法和插补的方法进行比较</li>
+<li>评估降维后向量在聚类等问题上的效果，包含完整解码过程的scVI效果更好</li>
+<li>与SIMLR比较，SIMLR也是一种降维到低维空间然后进行聚类等工作的方法，SIMLR的聚类结果更紧密，但可能无法捕捉更深的结构特征，同时scVI的抗噪声能力也更好.</li>
+<li>==评估消除批次效应/测序深度不同影响能力==</li>
+</ul>
+<h2 id="4-Note"><a href="#4-Note" class="headerlink" title="4. Note"></a>4. Note</h2><ul>
+<li>层次贝叶斯模型</li>
+<li>变分推断</li>
+<li>mean-filed</li>
+<li>随机优化过程</li>
+<li>生成式模型</li>
+<li>AutoEncoder &amp; VAE &amp; GAN</li>
+</ul>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2021/07/25/文献笔记-scVI-Deep-generative-modeling-for-single-cell-transcriptomics/" data-toggle="tooltip" data-placement="top"
-                           title="文献笔记 | scVI:Deep generative modeling for single-cell transcriptomics">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2021/07/18/integrating-single-cell-data/" data-toggle="tooltip" data-placement="top"
-                           title="integrating single-cell data">Next Post &rarr;</a>
+                        <a href="/2021/07/18/Questions-about-the-discover-of-novel-class-in-scRna-seq-Data/" data-toggle="tooltip" data-placement="top"
+                           title="Questions about the discover of novel class in scRna-seq Data">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -219,7 +264,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#文献笔记-scVI-Deep-generative-modeling-for-single-cell-transcriptomics"><span class="toc-text">文献笔记 | scVI:Deep generative modeling for single-cell transcriptomics</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0-Summary"><span class="toc-text">0. Summary</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Problem-amp-Objective"><span class="toc-text">1. Problem &amp; Objective</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Method-amp-Process"><span class="toc-text">2. Method &amp; Process</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Evaluate"><span class="toc-text">3. Evaluate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Note"><span class="toc-text">4. Note</span></a></li></ol></li></ol>
                 </div>
             </div>
         </div>
@@ -241,8 +286,8 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#note Bioinformatics"
-                           title="note Bioinformatics">note Bioinformatics</a>
+                        <a class="tag" href="/tags/#Paper SC"
+                           title="Paper SC">Paper SC</a>
                         
                     </div>
                 </section>
